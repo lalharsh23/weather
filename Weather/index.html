@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+</head>
+<body>
+    
+    <div class="card">
+        <div class="search">
+    <input type="text" placeholder="Enter city name" spellcheck="false">
+    <button><img src="./images/Vector_search_icon.svg.png" ></button>
+    </div>
+    <div class="error">
+        <p>Invalid city name</p>
+    </div>
+    <div class="weather">
+    <img src="./images/weather-icon-sun-cloud-with-rain-rainy-weather-vector-illustration-isolated_615232-424.avif" class="weather-icon">
+    <h1 class="temp">22°c</h1>
+    <h2 class="city">New York</h2>
+    <div class="details">
+    <div class="col">
+        <img src="./images/e67172f0e1e266098ae55b7f057c0761.jpg" >
+    <div>
+    <p class="humidity">50%</p>
+    <p>Humidity</p>
+    </div>
+    </div>
+    <div class="col">
+        <img src="./images/11-20.jpg" >
+    <div>
+    <p class="wind">50%</p>
+    <p>Wind Speed</p>
+    </div>
+    </div>
+   
+    </div>
+</div>
+</div>
+
+
+     
+<script>
+
+const apiKey = "405844fcba0f8d91fb5d7621cfa74d03";
+const apiUrl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+const searchBox = document.querySelector(".search input");
+const searchBtn = document.querySelector(".search button");
+const weatherIcon = document.querySelector(".weather-icon");
+
+async function checkWeather(city){
+    const response = await fetch(apiUrl + city +`&appid=${apiKey}`);
+
+    if(response.status == 404){
+    //    console.log("city hy");
+       document.querySelector(".error").style.display = "block";
+       document.querySelector(".weather").style.display = "none";
+
+    }else{
+        document.querySelector(".error").style.display = "none";
+        var data = await response.json();
+    console.log(data);
+
+document.querySelector(".city").innerHTML = data.name;
+document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°c";
+document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+document.querySelector(".wind").innerHTML = data.wind.speed + " km/hr";
+
+
+
+    if (data.weather[0].main == "Clouds") {
+    // var weatherIcon = document.getElementsByClassName("weather-icon");
+    // weatherIcon.src = "6122714.png";
+    weatherIcon.src = "./images/6122714.png";   
+
+
+}
+else if(data.weather[0].main == "Clear"){
+    // var weatherIcon = document.getElementsByClassName("weather-icon");
+    weatherIcon.src = "./images/1024px-Weather-sun-clouds-rain.svg.png";
+}
+else if(data.weather[0].main == "Rain"){
+    weatherIcon.src = "./images/1000_F_222412621_lS0F3xb07rovlTPOvUjyiacaZk1udzQF.jpg";
+}
+else if(data.weather[0].main == "Drizzle"){
+    weatherIcon.src = "./images/weather-icon-sun-cloud-with-rain-rainy-weather-vector-illustration-isolated_615232-424.avif";
+}
+else if(data.weather[0].main == "Mist"){
+    weatherIcon.src = "./images/weather-icon-logo-illustration-cloud-with-sun-symbol-template-for-graphic-and-web-design-collection-free-vector.jpg";
+
+
+
+}
+
+document.querySelector(".weather").style.display ="block";
+
+}
+    }
+
+   
+
+searchBtn.addEventListener("click", ()=>{
+    checkWeather(searchBox.value);
+})
+checkWeather();
+
+</script>
+
+</body>
+</html>
